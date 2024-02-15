@@ -1,3 +1,3 @@
 """
-Hei eirik er simp så det holder
+Hei eirik er drit fet
 """
