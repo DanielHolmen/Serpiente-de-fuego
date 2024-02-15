@@ -1,6 +1,6 @@
 # Konstanter
-WIDTH = 500  # Bredden til vinduet
-HEIGHT = 600 # Høyden til vinduet
+WIDTH = 1100  # Bredden til vinduet
+HEIGHT = 700 # Høyden til vinduet
 
 # Størrelsen til vinduet
 SIZE = (WIDTH, HEIGHT)

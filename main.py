@@ -21,7 +21,7 @@ class Game:
     # Metode for å starte et nytt spill
     def new(self):
         # Lager spiller-objekt
-        self.player = Player()        
+        self.player = Player(WIDTH//2, HEIGHT//2, PLAYER_WIDTH, PLAYER_HEIGHT, GREEN, 5)        
         self.run()
 
 
@@ -50,7 +50,7 @@ class Game:
     
     # Metode som oppdaterer
     def update(self):
-        self.player.update()
+        self.player.move()
         
         
     
@@ -58,6 +58,8 @@ class Game:
     def draw(self):
         # Fyller skjermen med en farge
         self.screen.fill(WHITE)
+        
+        pg.draw.rect(self.screen, self.player.color, self.player.rect)
         
         # "Flipper" displayet for å vise hva vi har tegnet
         pg.display.flip()

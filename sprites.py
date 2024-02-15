@@ -1,16 +1,26 @@
 import pygame as pg
 from settings import *
+#from main import *
 
 class Player:
-    def __init__(self):
-        self.image = pg.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
-        self.image.fill(GREEN)
-        self.rect = self.image.get_rect()
-        self.rect.center = (
-            WIDTH//2 - PLAYER_WIDTH//2,
-            HEIGHT//2 - PLAYER_HEIGHT//2
-        )
-
-    
-    def update(self):
-        pass
+    def __init__(self, x, y, width, height, color, speed):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.color = color
+        self.speed = speed
+        
+        self.rect = pg.Rect(x, y, width, height)
+        
+    def move(self):
+        keys = pg.key.get_pressed()
+        
+        if keys[pg.K_LEFT]:
+            self.rect.x -= self.speed
+        if keys[pg.K_RIGHT]:
+            self.rect.x += self.speed
+        if keys[pg.K_UP]:
+            self.rect.y -= self.speed
+        if keys[pg.K_DOWN]:
+            self.rect.y += self.speed
