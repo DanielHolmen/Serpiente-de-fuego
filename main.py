@@ -21,7 +21,9 @@ class Game:
     # Metode for å starte et nytt spill
     def new(self):
         # Lager spiller-objekt
-        self.player = Player()        
+        self.player = Player()
+        self.head = Head()
+        
         self.run()
 
 
@@ -51,6 +53,8 @@ class Game:
     # Metode som oppdaterer
     def update(self):
         self.player.update()
+        self.head.move()
+
         
     
     # Metode som tegner ting på skjermen
@@ -59,6 +63,8 @@ class Game:
         self.screen.fill(WHITE)
         
         pg.draw.rect(self.screen, GREEN, self.player.rect)
+        pg.draw.rect(self.screen, RED, self.head.rect)
+        #pg.draw.rect(self.screen, RED, (self.head.point[0], self.head.point[1], 10, 10))
         
         # "Flipper" displayet for å vise hva vi har tegnet
         pg.display.flip()
@@ -67,9 +73,6 @@ class Game:
     # Metode som viser start-skjerm
     def show_start_screen(self):
         pass
-
-
-    
     
 # Lager et spill-objekt
 game_object = Game()
@@ -78,7 +81,6 @@ game_object = Game()
 while game_object.running:
     # Starter et nytt spill
     game_object.new()
-    
 
 
 # Avslutter pygame
