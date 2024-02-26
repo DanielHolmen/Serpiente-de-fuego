@@ -2,6 +2,8 @@ import pygame as pg
 import random
 from settings import *
 
+acc_list = []
+
 class Player:
     def __init__(self):
         self.image = pg.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
@@ -80,6 +82,9 @@ class Head:
         self.distance = pg.math.Vector2(self.point[0] - self.pos.x, self.point[1] - self.pos.y)
         
         self.acc = self.direction * self.acc_value
+        #acc_list.insert(0, self.acc)
+        print(acc_list)
+        
         self.vel += self.acc
         self.vel = self.vel.normalize()
             
@@ -90,8 +95,5 @@ class Head:
         #print(self.distance.length())
         
         if self.distance.length() <= 100:
+            acc_list.insert(0, self.acc)
             self.get_point()
-                
-"""
-Vi må sjekke når center til hodet er i en viss distanse fra punktet. Hvis ikke, vil de aldri treffe hverandre.
-"""

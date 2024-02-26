@@ -64,7 +64,7 @@ class Game:
         
         pg.draw.rect(self.screen, GREEN, self.player.rect)
         pg.draw.rect(self.screen, RED, self.head.rect)
-        #pg.draw.rect(self.screen, RED, (self.head.point[0], self.head.point[1], 10, 10))
+        pg.draw.rect(self.screen, RED, (self.head.point[0], self.head.point[1], 10, 10))
         
         # "Flipper" displayet for å vise hva vi har tegnet
         pg.display.flip()
@@ -86,6 +86,3 @@ while game_object.running:
 # Avslutter pygame
 pg.quit()
 #sys.exit() # Dersom det ikke er tilstrekkelig med pg.quit()
-
-
-
