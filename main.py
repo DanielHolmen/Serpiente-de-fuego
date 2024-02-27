@@ -1,7 +1,13 @@
 import pygame as pg
 import sys, random
+import time
 from settings import *
 from sprites import *
+
+segment_list = []
+
+dt = 0
+t1 = time.time()
 
 class Game:
     def __init__(self):
@@ -23,6 +29,7 @@ class Game:
         # Lager spiller-objekt
         self.player = Player()
         self.head = Head()
+        self.segment = Segment()
         
         self.run()
 
@@ -54,7 +61,12 @@ class Game:
     def update(self):
         self.player.update()
         self.head.move()
-
+        self.segment.move()
+        """
+        segment_list.append(self.segment)
+        for segment in segment_list:
+            self.segment.move()
+        """
         
     
     # Metode som tegner ting på skjermen
@@ -64,7 +76,8 @@ class Game:
         
         pg.draw.rect(self.screen, GREEN, self.player.rect)
         pg.draw.rect(self.screen, RED, self.head.rect)
-        pg.draw.rect(self.screen, RED, (self.head.point[0], self.head.point[1], 10, 10))
+        pg.draw.rect(self.screen, LIGHTRED, self.segment.rect)
+        #pg.draw.rect(self.screen, RED, (self.head.point[0], self.head.point[1], 10, 10))
         
         # "Flipper" displayet for å vise hva vi har tegnet
         pg.display.flip()
@@ -81,7 +94,18 @@ game_object = Game()
 while game_object.running:
     # Starter et nytt spill
     game_object.new()
-
+    
+    """
+    t2 = time.time()
+    
+    dt = t2 - t1
+    
+    if dt > 1:
+        segment = Segment()
+        pg.draw.rect(self.screen, LIGHTRED, self.segment.rect)
+        segment.move()
+        t1 = time.time()
+    """
 
 # Avslutter pygame
 pg.quit()
