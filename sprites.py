@@ -2,8 +2,6 @@ import pygame as pg
 import random
 from settings import *
 
-snake_head_img = pg.image.load("snake_head_sprite.png")
-
 acc_list = []
 segment_list = []
 
@@ -24,6 +22,9 @@ class Player:
             100,
             100
         )
+        
+        self.score = 0
+        self.last_time_score_added = pg.time.get_ticks()
         
     def move(self):
         keys = pg.key.get_pressed()
@@ -52,6 +53,9 @@ class Player:
             
         if self.rect.y >= HEIGHT - PLAYER_HEIGHT:
             self.rect.y = HEIGHT - PLAYER_HEIGHT
+            
+    def add_score(self):
+        self.score += 10
                 
     def update(self):
         self.move()
