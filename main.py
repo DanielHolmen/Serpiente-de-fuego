@@ -68,11 +68,21 @@ class Game:
             self.head.add_segment()
             self.player.add_score()
             self.last_segment_time = current_time
+            self.fireball = FireBall(self.head.pos.x, self.head.pos.y)
+            fireball_list.append(self.fireball)
         
         for segment in segment_list:
             segment.move()
             
             if segment.rect.colliderect(self.player.rect):
+                self.playing = False
+                self.running = False
+        
+        for fireball in fireball_list:
+            fireball.move()
+            fireball.check_collision()
+            
+            if fireball.rect.colliderect(self.player.rect):
                 self.playing = False
                 self.running = False
     
@@ -89,6 +99,10 @@ class Game:
         
         #pg.draw.rect(self.screen, RED, (self.head.point[0], self.head.point[1], 10, 10))
         
+        if len(fireball_list)>0:
+            for fireball in fireball_list:
+                pg.draw.rect(self.screen, LIGHTBLUE, fireball.rect)
+    
         pg.display.flip()
     
     def display_score(self):

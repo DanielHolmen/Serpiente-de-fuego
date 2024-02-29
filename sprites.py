@@ -4,6 +4,7 @@ from settings import *
 
 acc_list = []
 segment_list = []
+fireball_list = []
 
 class Player:
     def __init__(self):
@@ -194,6 +195,49 @@ class Segment:
             self.vel = self.vel.normalize()
             self.pos += self.vel * self.speed
             self.rect.center = self.pos
+        
+        
+        
+        
+class FireBall:
+    
+    def __init__(self, x, y):
+        self.image = pg.Surface((25, 25))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+    
+        self.rect.center = (x, y)
+        
+        self.pos = pg.math.Vector2(self.rect.center)
+        
+        self.vel_direction = pg.math.Vector2(random.randint(-1,1), random.randint(-1,1))
+        
+        self.speed = 3
+    
+        
+    def move(self):
+        
+        while self.vel_direction.length() == 0:
+            self.vel_direction = pg.math.Vector2(random.randint(-1,1), random.randint(-1,1))
+        
+        self.pos += self.vel_direction * self.speed
+            
+        self.rect.center = self.pos
+        
+    def check_collision(self):
+        if self.pos.x <= 0 + 25//2:
+            self.vel_direction.x *= -1
+        
+        if self.pos.x >= WIDTH - 25//2:
+            self.vel_direction.x *= -1
+    
+    
+        if self.pos.y <= 0 + 25//2:
+            self.vel_direction.y *= -1
+        
+        if self.pos.y >= HEIGHT - 25//2:
+            self.vel_direction.y *= -1
+            
         
         
         
