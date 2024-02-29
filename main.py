@@ -4,11 +4,6 @@ import time
 from settings import *
 from sprites import *
 
-segment_list = []
-
-dt = 0
-t1 = time.time()
-
 class Game:
     def __init__(self):
         # Initiere pygame
@@ -23,13 +18,16 @@ class Game:
         # Attributt som styrer om spillet skal kjøres
         self.running = True
         
+        self.last_segment_time = pg.time.get_ticks()
+        
         
     # Metode for å starte et nytt spill
     def new(self):
         # Lager spiller-objekt
         self.player = Player()
         self.head = Head()
-        self.segment = Segment()
+        segment_list.insert(0, self.head)
+        #self.segment = Segment()
         
         self.run()
 
@@ -60,14 +58,20 @@ class Game:
     # Metode som oppdaterer
     def update(self):
         self.player.update()
-        self.head.move()
-        self.segment.move()
-        """
-        segment_list.append(self.segment)
-        for segment in segment_list:
-            self.segment.move()
-        """
         
+        current_time = pg.time.get_ticks()
+        if current_time - self.last_segment_time >= 3000:
+            self.head.add_segment()
+            self.last_segment_time = current_time
+        
+        #if len(acc_list) > 1:
+        for segment in segment_list:
+            segment.move()
+            
+            if segment.rect.colliderect(self.player.rect):
+                self.playing = False
+                self.running = False
+                print("Death")
     
     # Metode som tegner ting på skjermen
     def draw(self):
@@ -75,11 +79,14 @@ class Game:
         self.screen.fill(WHITE)
         
         pg.draw.rect(self.screen, GREEN, self.player.rect)
-        pg.draw.rect(self.screen, RED, self.head.rect)
-        pg.draw.rect(self.screen, LIGHTRED, self.segment.rect)
+        #pg.draw.rect(self.screen, RED, self.head.rect)
+        
+        for segment in segment_list:
+            #pg.draw.rect(self.screen, RED, self.head.rect)
+            pg.draw.rect(self.screen, RED, segment.rect)
+        
         #pg.draw.rect(self.screen, RED, (self.head.point[0], self.head.point[1], 10, 10))
         
-        # "Flipper" displayet for å vise hva vi har tegnet
         pg.display.flip()
     
     
@@ -95,17 +102,6 @@ while game_object.running:
     # Starter et nytt spill
     game_object.new()
     
-    """
-    t2 = time.time()
-    
-    dt = t2 - t1
-    
-    if dt > 1:
-        segment = Segment()
-        pg.draw.rect(self.screen, LIGHTRED, self.segment.rect)
-        segment.move()
-        t1 = time.time()
-    """
 
 # Avslutter pygame
 pg.quit()
