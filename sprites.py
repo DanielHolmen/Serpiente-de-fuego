@@ -2,9 +2,9 @@ import pygame as pg
 import random
 from settings import *
 
-acc_list = []
 segment_list = []
 fireball_list = []
+homing_fireball_list = []
 
 class Player:
     def __init__(self):
@@ -12,20 +12,12 @@ class Player:
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         
-        """
-        self.rect.center = (
-            WIDTH//2 - PLAYER_WIDTH//2,
-            HEIGHT//2 - PLAYER_HEIGHT//2
-        )
-        """
-        
         self.rect.center = (
             100,
             100
         )
         
         self.score = 0
-        self.last_time_score_added = pg.time.get_ticks()
         
     def move(self):
         keys = pg.key.get_pressed()
@@ -65,7 +57,7 @@ class Player:
 
 class Head:
     def __init__(self):
-        self.image = pg.Surface((40, 40))
+        self.image = pg.Surface((HEAD_WIDTH, HEAD_HEIGHT))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
         
@@ -97,7 +89,6 @@ class Head:
         self.distance = pg.math.Vector2(self.point[0] - self.pos.x, self.point[1] - self.pos.y)
         
         self.acc = self.direction * self.acc_value
-        acc_list.insert(0, self.acc)
         
         self.vel += self.acc
         self.vel = self.vel.normalize()
@@ -127,16 +118,9 @@ class Segment:
     segment_nr = 0
     
     def __init__(self, x, y):
-        self.image = pg.Surface((25, 25))
+        self.image = pg.Surface((SEGMENT_WIDTH, SEGMENT_HEIGHT))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
-        
-        """
-        self.rect.center = (
-            WIDTH//2 - PLAYER_WIDTH//2,
-            HEIGHT//2 - PLAYER_HEIGHT//2
-        )
-        """
         
         self.rect.center = (x, y)
         
@@ -149,37 +133,6 @@ class Segment:
         self.speed = 3
         
     def move(self):
-        """
-        self.acc = acc_list[self.segment_nr]
-            
-        self.vel += self.acc
-        self.vel = self.vel.normalize()
-                
-        
-        self.pos += self.vel * self.speed
-        self.rect.center = self.pos
-        """
-        
-        
-        """
-        if self.segment_nr > 0:  # Skip the head segment
-            # Calculate the direction to follow the previous segment
-            previous_segment = segment_list[self.segment_nr - 1]
-            
-            direction = pg.math.Vector2(previous_segment.pos - self.pos)
-            distance = pg.math.Vector2(previous_segment.pos - self.pos).length()
-            direction.normalize_ip()
-            
-            if distance <= 40:
-                self.vel = pg.math.Vector2(0, 0)
-                #self.direction *= 0.5
-                
-            else:
-                # Move towards the previous segment
-                self.pos += direction * self.speed
-                self.rect.center = self.pos
-        """
-
         if self.segment_nr > 0:  # Skip the head segment
             # Calculate the direction to follow the previous segment
             previous_segment = segment_list[self.segment_nr - 1]
@@ -200,9 +153,8 @@ class Segment:
         
         
 class FireBall:
-    
     def __init__(self, x, y):
-        self.image = pg.Surface((25, 25))
+        self.image = pg.Surface((FIREBALL_WIDTH, FIREBALL_HEIGHT))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
     
@@ -216,7 +168,6 @@ class FireBall:
     
         
     def move(self):
-        
         while self.vel_direction.length() == 0:
             self.vel_direction = pg.math.Vector2(random.randint(-1,1), random.randint(-1,1))
         
@@ -225,20 +176,51 @@ class FireBall:
         self.rect.center = self.pos
         
     def check_collision(self):
-        if self.pos.x <= 0 + 25//2:
+        if self.pos.x <= FIREBALL_WIDTH//2:
             self.vel_direction.x *= -1
         
-        if self.pos.x >= WIDTH - 25//2:
+        if self.pos.x >= WIDTH - FIREBALL_WIDTH//2:
             self.vel_direction.x *= -1
     
     
-        if self.pos.y <= 0 + 25//2:
+        if self.pos.y <= FIREBALL_HEIGHT//2:
             self.vel_direction.y *= -1
         
-        if self.pos.y >= HEIGHT - 25//2:
+        if self.pos.y >= HEIGHT - FIREBALL_HEIGHT//2:
             self.vel_direction.y *= -1
             
+    def update(self):
+        self.move()
+        self.check_collision()
+
+
+
+
+class HomingFireBall:
+    def __init__(self, x, y, player_instance):
+        self.image = pg.Surface((FIREBALL_WIDTH, FIREBALL_HEIGHT))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+    
+        self.rect.center = (x, y)
         
+        self.pos = pg.math.Vector2(self.rect.center)
+        self.vel = pg.math.Vector2(0, 0)
+        self.speed = 2
+        self.homing_strength = 0.1
         
+        self.player_instance = player_instance
+    
         
+    def move(self):
+        self.vel_direction = pg.math.Vector2(self.player_instance.rect.center[0] - self.pos.x, self.player_instance.rect.center[1] - self.pos.y)
         
+        self.vel = self.vel_direction * self.homing_strength
+        self.vel = self.vel.normalize()    
+    
+        self.pos += self.vel * self.speed
+        self.rect.center = self.pos
+            
+    def update(self):
+        self.move()
+            
