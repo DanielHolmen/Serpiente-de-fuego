@@ -4,27 +4,11 @@ import time
 from settings import *
 from sprites import *
 
-pg.mixer.init()
-
-add_segment_sound = pg.mixer.Sound("./Sound/add_segment.mp3")
-shoot_fireball_sound = pg.mixer.Sound("./Sound/shoot_fireball.mp3")
-shoot_homing_fireball_sound = pg.mixer.Sound("./Sound/shoot_homing_fireball.mp3")
-
-fireball_image = pg.image.load("./Sprites/fireball.png")
-homing_fireball_image = pg.image.load("./Sprites/homing_fireball.png")
-segment_image = pg.image.load("./Sprites/snake_segment.png")
-head_image = pg.image.load("./Sprites/snake_head.png")
-
-scaled_fireball_image = pg.transform.scale(fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
-scaled_homing_fireball_image = pg.transform.scale(homing_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
-scaled_segment_image = pg.transform.scale(segment_image, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
-scaled_head_image = pg.transform.scale(head_image, (HEAD_WIDTH, HEAD_HEIGHT))
-
-
 class Game:
     def __init__(self):
         # Initiere pygame
         pg.init()
+        pg.mixer.init()
 
         # Lager hovedvinduet
         self.screen = pg.display.set_mode(SIZE)
@@ -33,6 +17,8 @@ class Game:
         self.clock = pg.time.Clock()
         
         self.font = pg.font.SysFont("Arial", 26)
+        self.title_font = pg.font.SysFont("Arial", 60)
+        self.instructions_font = pg.font.SysFont("Arial", 30)
         
         # Attributt som styrer om spillet skal kjøres
         self.running = True
@@ -41,8 +27,7 @@ class Game:
         self.last_time_score_added = pg.time.get_ticks()
         
         self.last_time_shot = pg.time.get_ticks()
-        self.last_time_homing_shot = pg.time.get_ticks()
-        
+        self.last_time_homing_shot = pg.time.get_ticks()    
         
     # Metode for å starte et nytt spill
     def new(self):
@@ -50,7 +35,7 @@ class Game:
         self.player = Player()
         self.head = Head()
         segment_list.insert(0, self.head)
-        #self.segment = Segment()
+        self.powerup = Powerup()
         
         self.run()
 
@@ -70,13 +55,16 @@ class Game:
     # Metode som håndterer hendelser
     def events(self):
         # Går gjennom hendelser (events)
-        for event in pg.event.get():
+        for event in pg.event.get():        
             # Sjekker om vi ønsker å lukke vinduet
             if event.type == pg.QUIT:
                 if self.playing:
                     self.playing = False
                 self.running = False # Spillet skal avsluttes
-
+                
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    powerup_list.append(self.powerup)
     
     # Metode som oppdaterer
     def update(self):
@@ -85,6 +73,7 @@ class Game:
         current_time = pg.time.get_ticks()
         fireball_spawn_interval = random.randint(3000, 5000)
         homing_fireball_spawn_interval = 10_000
+        powerup_spawn_interval = 15_000
         
         if current_time - self.last_segment_time >= 3000:
             self.head.add_segment()
@@ -111,7 +100,7 @@ class Game:
             
             if segment.rect.colliderect(self.player.rect):
                 self.playing = False
-                self.running = False
+                #self.running = False
         
         for fireball in fireball_list:
             fireball.update()
@@ -130,7 +119,8 @@ class Game:
     # Metode som tegner ting på skjermen
     def draw(self):
         # Fyller skjermen med en farge
-        self.screen.fill(WHITE)
+        self.screen.fill(DARKGREY)
+        #self.screen.blit(scaled_background_image, (0, 0))
         
         self.display_score()
         
@@ -140,7 +130,7 @@ class Game:
             
             if segment == self.head:
                 self.screen.blit(scaled_head_image, (self.head.rect.topleft))
-            #pg.draw.rect(self.screen, RED, segment.rect)
+                #pg.draw.rect(self.screen, RED, segment.rect)
             else:
                 self.screen.blit(scaled_segment_image, (segment.rect.topleft))
         
@@ -159,18 +149,20 @@ class Game:
         pg.display.flip()
     
     def display_score(self):
-        text_img = self.font.render(f"{self.player.score}", True, BLACK)
+        text_img = self.font.render(f"{self.player.score}", True, WHITE)
         self.screen.blit(text_img, (WIDTH - 100, 20))
     
     # Metode som viser start-skjerm
     def show_start_screen(self):
         pass
+        
     
 # Lager et spill-objekt
 game_object = Game()
 
 # Spill-løkken
 while game_object.running:
+        
     # Starter et nytt spill
     game_object.new()
     

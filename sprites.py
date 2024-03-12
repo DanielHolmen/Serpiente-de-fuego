@@ -1,6 +1,7 @@
 import pygame as pg
 import random
 from settings import *
+import math
 
 segment_list = []
 fireball_list = []
@@ -68,8 +69,9 @@ class Head:
         
         self.pos = pg.math.Vector2(self.rect.center)
         self.vel = pg.math.Vector2(0, 0)
+        self.acc = pg.math.Vector2(0, 0)
         
-        self.acc_value = 0.1
+        #self.acc_value = 0.5
         self.speed = 3
         
         self.get_point()
@@ -88,11 +90,13 @@ class Head:
     def move(self):
         self.distance = pg.math.Vector2(self.point[0] - self.pos.x, self.point[1] - self.pos.y)
         
-        self.acc = self.direction * self.acc_value
+        self.target_acc = self.direction
+        
+        smoothing_factor = 0.04
+        self.acc = self.acc.lerp(self.target_acc, smoothing_factor)
         
         self.vel += self.acc
         self.vel = self.vel.normalize()
-            
     
         self.pos += self.vel * self.speed
         self.rect.center = self.pos
@@ -146,6 +150,7 @@ class Segment:
             # Update velocity and position based on acceleration
             self.vel += acceleration
             self.vel = self.vel.normalize()
+            
             self.pos += self.vel * self.speed
             self.rect.center = self.pos
         
@@ -162,14 +167,14 @@ class FireBall:
         
         self.pos = pg.math.Vector2(self.rect.center)
         
-        self.vel_direction = pg.math.Vector2(random.randint(-1,1), random.randint(-1,1))
+        self.vel_direction = pg.math.Vector2(random.uniform(-1,1), random.uniform(-1,1))
         
         self.speed = 3
     
         
     def move(self):
         while self.vel_direction.length() == 0:
-            self.vel_direction = pg.math.Vector2(random.randint(-1,1), random.randint(-1,1))
+            self.vel_direction = pg.math.Vector2(random.uniform(-1,1), random.uniform(-1,1))
         
         self.pos += self.vel_direction * self.speed
             
@@ -223,4 +228,23 @@ class HomingFireBall:
             
     def update(self):
         self.move()
-            
+        
+      
+class Powerup:
+    def __init__(self):
+        self.image = pg.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+    
+        self.rect.center = (random.randint(0, WIDTH), random.randint(0, HEIGHT))
+        self.pos = pg.math.Vector2(self.rect.center)
+        self.x = 0
+        
+    def move(self):
+        self.x += 0.01
+        self.rect.centery = (self.pos.y + int(25 * math.sin(self.x)))
+        
+        
+        
+        
+        
