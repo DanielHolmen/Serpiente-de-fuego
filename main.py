@@ -100,7 +100,7 @@ class Game:
             
             if segment.rect.colliderect(self.player.rect):
                 self.playing = False
-                #self.running = False
+                self.running = False
         
         for fireball in fireball_list:
             fireball.update()
