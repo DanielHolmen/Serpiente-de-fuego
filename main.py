@@ -9,6 +9,9 @@ class Game:
         # Initiere pygame
         pg.init()
         pg.mixer.init()
+        
+        #soundtrack_sound.set_volume(0.25)
+        #soundtrack_sound.play(-1)
 
         # Lager hovedvinduet
         self.screen = pg.display.set_mode(SIZE)
@@ -27,7 +30,8 @@ class Game:
         self.last_time_score_added = pg.time.get_ticks()
         
         self.last_time_shot = pg.time.get_ticks()
-        self.last_time_homing_shot = pg.time.get_ticks()    
+        self.last_time_homing_shot = pg.time.get_ticks()
+        self.last_time_fast_shot = pg.time.get_ticks()
         
     # Metode for å starte et nytt spill
     def new(self):
@@ -35,7 +39,7 @@ class Game:
         self.player = Player()
         self.head = Head()
         segment_list.insert(0, self.head)
-        self.powerup = Powerup()
+        #self.powerup = Powerup()
         
         self.run()
 
@@ -73,7 +77,8 @@ class Game:
         current_time = pg.time.get_ticks()
         fireball_spawn_interval = random.randint(3000, 5000)
         homing_fireball_spawn_interval = 10_000
-        powerup_spawn_interval = 15_000
+        fast_fireball_spawn_interval = 20_000
+        #powerup_spawn_interval = 15_000
         
         if current_time - self.last_segment_time >= 3000:
             self.head.add_segment()
@@ -91,9 +96,16 @@ class Game:
         if current_time - self.last_time_homing_shot >= homing_fireball_spawn_interval:
             self.homing_fireball = HomingFireBall(self.head.pos.x, self.head.pos.y, self.player)
             homing_fireball_list.append(self.homing_fireball)
-            shoot_homing_fireball_sound.play()
+            shoot_fireball_sound.play()
             
             self.last_time_homing_shot = pg.time.get_ticks()
+            
+        if current_time - self.last_time_fast_shot >= fast_fireball_spawn_interval:
+            self.fast_fireball = FastFireball(self.head.pos.x, self.head.pos.y, self.player)
+            fast_fireball_list.append(self.fast_fireball)
+            shoot_fireball_sound.play()
+            
+            self.last_time_fast_shot = pg.time.get_ticks()
         
         for segment in segment_list:
             segment.move()
@@ -115,6 +127,13 @@ class Game:
             if homing_fireball.rect.colliderect(self.player.rect):
                 self.playing = False
                 self.running = False
+                
+        for fast_fireball in fast_fireball_list:
+            fast_fireball.update()
+            
+            if fast_fireball.rect.colliderect(self.player.rect):
+                self.playing = False
+                self.running = False
     
     # Metode som tegner ting på skjermen
     def draw(self):
@@ -124,7 +143,8 @@ class Game:
         
         self.display_score()
         
-        pg.draw.rect(self.screen, GREEN, self.player.rect)
+        #pg.draw.rect(self.screen, GREEN, self.player.rect)
+        self.screen.blit(scaled_player_image, (self.player.rect.topleft))
         
         for segment in segment_list:
             
@@ -145,6 +165,11 @@ class Game:
             for homing_fireball in homing_fireball_list:
                 #pg.draw.rect(self.screen, YELLOW, homing_fireball.rect)
                 self.screen.blit(scaled_homing_fireball_image, (homing_fireball.rect.topleft))
+                
+        if len(fast_fireball_list) > 0:
+            for fast_fireball in fast_fireball_list:
+                #pg.draw.rect(self.screen, YELLOW, fast_fireball.rect)
+                self.screen.blit(scaled_fast_fireball_image, (fast_fireball.rect.topleft))
     
         pg.display.flip()
     

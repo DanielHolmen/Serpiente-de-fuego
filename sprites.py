@@ -6,6 +6,7 @@ import math
 segment_list = []
 fireball_list = []
 homing_fireball_list = []
+fast_fireball_list = []
 
 class Player:
     def __init__(self):
@@ -211,7 +212,7 @@ class HomingFireBall:
         
         self.pos = pg.math.Vector2(self.rect.center)
         self.vel = pg.math.Vector2(0, 0)
-        self.speed = 2
+        self.speed = random.uniform(1.5, 2.5)
         self.homing_strength = 0.1
         
         self.player_instance = player_instance
@@ -221,6 +222,36 @@ class HomingFireBall:
         self.vel_direction = pg.math.Vector2(self.player_instance.rect.center[0] - self.pos.x, self.player_instance.rect.center[1] - self.pos.y)
         
         self.vel = self.vel_direction * self.homing_strength
+        self.vel = self.vel.normalize()    
+    
+        self.pos += self.vel * self.speed
+        self.rect.center = self.pos
+            
+    def update(self):
+        self.move()
+        
+        
+        
+class FastFireball:
+    def __init__(self, x, y, player_instance):
+        self.image = pg.Surface((FIREBALL_WIDTH, FIREBALL_HEIGHT))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+    
+        self.rect.center = (x, y)
+        
+        self.pos = pg.math.Vector2(self.rect.center)
+        self.vel = pg.math.Vector2(0, 0)
+        self.speed = 10
+        
+        self.player_instance = player_instance
+        
+        self.vel_direction = pg.math.Vector2(self.player_instance.rect.center[0] - self.pos.x, self.player_instance.rect.center[1] - self.pos.y)
+        
+    def move(self):
+        #self.vel_direction = pg.math.Vector2(self.player_instance.rect.center[0] - self.pos.x, self.player_instance.rect.center[1] - self.pos.y)
+        
+        self.vel = self.vel_direction
         self.vel = self.vel.normalize()    
     
         self.pos += self.vel * self.speed

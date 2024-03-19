@@ -22,8 +22,8 @@ LIGHTRED = (255, 100, 100)
 YELLOW = (252, 220, 42)
 
 # Innstillinger til spilleren
-PLAYER_WIDTH = 25
-PLAYER_HEIGHT = 25
+PLAYER_WIDTH = 40
+PLAYER_HEIGHT = 40
 PLAYER_SPEED = 5
 
 # Innstillinger til slangehodet
@@ -34,7 +34,7 @@ HEAD_HEIGHT = 80
 SEGMENT_WIDTH = 50
 SEGMENT_HEIGHT = 50
 
-# Innstillinger til ildkule
+# Innstillinger til ildkuler
 FIREBALL_WIDTH = 30
 FIREBALL_HEIGHT = 30
 
@@ -45,18 +45,20 @@ FIREBALL_HEIGHT = 30
 pg.mixer.init()
 
 add_segment_sound = pg.mixer.Sound("./Sound/add_segment.mp3")
-shoot_fireball_sound = pg.mixer.Sound("./Sound/shoot_fireball.mp3")
+shoot_fireball_sound = pg.mixer.Sound("./Sound/fireball.wav")
 shoot_homing_fireball_sound = pg.mixer.Sound("./Sound/shoot_homing_fireball.mp3")
 
+player_image = pg.image.load("./Sprites/player.png")
 fireball_image = pg.image.load("./Sprites/fireball.png")
 homing_fireball_image = pg.image.load("./Sprites/homing_fireball.png")
+fast_fireball_image = pg.image.load("./Sprites/fast_fireball.png")
 segment_image = pg.image.load("./Sprites/snake_segment_2.png")
 head_image = pg.image.load("./Sprites/snake_head_2.png")
-background_image = pg.image.load("./Sprites/background.png")
 
+scaled_player_image = pg.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 scaled_fireball_image = pg.transform.scale(fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
 scaled_homing_fireball_image = pg.transform.scale(homing_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
+scaled_fast_fireball_image = pg.transform.scale(fast_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
 scaled_segment_image = pg.transform.scale(segment_image, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
 scaled_head_image = pg.transform.scale(head_image, (HEAD_WIDTH, HEAD_HEIGHT))
-scaled_background_image = pg.transform.scale(background_image, (WIDTH, HEIGHT))
 
