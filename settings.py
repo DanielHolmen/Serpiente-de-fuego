@@ -55,13 +55,22 @@ fast_fireball_spawn_interval = random.randint(12_000, 16_000)
 coin_spawn_interval = 15_000
 
 
-#Bilder og lydeffekter
+# Lydeffekter og mussikk
 pg.mixer.init()
 
-add_segment_sound = pg.mixer.Sound("./Sound/add_segment.mp3")
-shoot_fireball_sound = pg.mixer.Sound("./Sound/fireball.wav")
-shoot_homing_fireball_sound = pg.mixer.Sound("./Sound/shoot_homing_fireball.mp3")
+segment_sound = pg.mixer.Sound("./Sound/segment.wav")
+fireball_sound = pg.mixer.Sound("./Sound/fireball.wav")
+homing_fireball_sound = pg.mixer.Sound("./Sound/homing_fireball.wav")
+fast_fireball_sound = pg.mixer.Sound("./Sound/fast_fireball.wav")
+explosion_sound = pg.mixer.Sound("./Sound/explosion.wav")
 
+segment_sound.set_volume(0.1)
+homing_fireball_sound.set_volume(0.5)
+fast_fireball_sound.set_volume(0.7)
+
+
+
+# Bilder og sprites
 player_image = pg.image.load("./Sprites/player.png")
 fireball_image = pg.image.load("./Sprites/fireball.png")
 homing_fireball_image = pg.image.load("./Sprites/homing_fireball.png")

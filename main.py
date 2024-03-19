@@ -78,28 +78,28 @@ class Game:
         
         if current_time - self.last_segment_time >= 3000:
             self.head.add_segment()
-            add_segment_sound.play()
+            segment_sound.play()
             self.player.add_score()
             self.last_segment_time = current_time
             
         if current_time - self.last_time_shot >= fireball_spawn_interval:
             self.fireball = FireBall(self.head.pos.x, self.head.pos.y)
             fireball_list.append(self.fireball)
-            shoot_fireball_sound.play()
+            fireball_sound.play()
             
             self.last_time_shot = pg.time.get_ticks()
             
         if current_time - self.last_time_homing_shot >= homing_fireball_spawn_interval:
             self.homing_fireball = HomingFireBall(self.head.pos.x, self.head.pos.y, self.player)
             homing_fireball_list.append(self.homing_fireball)
-            shoot_fireball_sound.play()
+            homing_fireball_sound.play()
             
             self.last_time_homing_shot = pg.time.get_ticks()
             
         if current_time - self.last_time_fast_shot >= fast_fireball_spawn_interval:
             self.fast_fireball = FastFireball(self.head.pos.x, self.head.pos.y, self.player)
             fast_fireball_list.append(self.fast_fireball)
-            shoot_fireball_sound.play()
+            fast_fireball_sound.play()
             
             self.last_time_fast_shot = pg.time.get_ticks()
             
@@ -138,6 +138,8 @@ class Game:
                 fast_fireball_list.remove(fast_fireball)
                 self.shockwave = Shockwave(self.screen, self.fast_fireball)
                 shockwave_list.append(self.shockwave)
+                fast_fireball_sound.stop()
+                explosion_sound.play()
             
             if fast_fireball.rect.colliderect(self.player.rect):
                 self.playing = False
