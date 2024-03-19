@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 
 # Konstanter
 WIDTH = 1100  # Bredden til vinduet
@@ -20,10 +21,11 @@ LIGHTBLUE = (100, 100, 255)
 GREY = (142, 142, 142)
 LIGHTRED = (255, 100, 100)
 YELLOW = (252, 220, 42)
+PURPLE = (200, 75, 255)
 
 # Innstillinger til spilleren
-PLAYER_WIDTH = 40
-PLAYER_HEIGHT = 40
+PLAYER_WIDTH = 45
+PLAYER_HEIGHT = 45
 PLAYER_SPEED = 5
 
 # Innstillinger til slangehodet
@@ -38,7 +40,19 @@ SEGMENT_HEIGHT = 50
 FIREBALL_WIDTH = 30
 FIREBALL_HEIGHT = 30
 
+# Innstillinger til powerups
+COIN_WIDTH = 50
+COIN_HEIGHT = 50
 
+SHOCKWAVE_WIDTH = 50
+SHOCKWAVE_HEIGHT = 50
+
+
+# Spawning-intervaller av spillobjekter
+fireball_spawn_interval = random.randint(3000, 5000)
+homing_fireball_spawn_interval = 10_000
+fast_fireball_spawn_interval = random.randint(12_000, 16_000)
+coin_spawn_interval = 15_000
 
 
 #Bilder og lydeffekter
@@ -54,6 +68,7 @@ homing_fireball_image = pg.image.load("./Sprites/homing_fireball.png")
 fast_fireball_image = pg.image.load("./Sprites/fast_fireball.png")
 segment_image = pg.image.load("./Sprites/snake_segment_2.png")
 head_image = pg.image.load("./Sprites/snake_head_2.png")
+coin_image = pg.image.load("./Sprites/coin.png")
 
 scaled_player_image = pg.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 scaled_fireball_image = pg.transform.scale(fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
@@ -61,4 +76,5 @@ scaled_homing_fireball_image = pg.transform.scale(homing_fireball_image, (FIREBA
 scaled_fast_fireball_image = pg.transform.scale(fast_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
 scaled_segment_image = pg.transform.scale(segment_image, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
 scaled_head_image = pg.transform.scale(head_image, (HEAD_WIDTH, HEAD_HEIGHT))
+scaled_coin_image = pg.transform.scale(coin_image, (COIN_WIDTH, COIN_HEIGHT))
 

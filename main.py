@@ -9,9 +9,6 @@ class Game:
         # Initiere pygame
         pg.init()
         pg.mixer.init()
-        
-        #soundtrack_sound.set_volume(0.25)
-        #soundtrack_sound.play(-1)
 
         # Lager hovedvinduet
         self.screen = pg.display.set_mode(SIZE)
@@ -27,7 +24,7 @@ class Game:
         self.running = True
         
         self.last_segment_time = pg.time.get_ticks()
-        self.last_time_score_added = pg.time.get_ticks()
+        self.last_time_coin_collected = pg.time.get_ticks()
         
         self.last_time_shot = pg.time.get_ticks()
         self.last_time_homing_shot = pg.time.get_ticks()
@@ -36,10 +33,10 @@ class Game:
     # Metode for å starte et nytt spill
     def new(self):
         # Lager spiller-objekt
-        self.player = Player()
+        self.player = Player(self.screen)
         self.head = Head()
         segment_list.insert(0, self.head)
-        #self.powerup = Powerup()
+        #self.coin = Powerup()
         
         self.run()
 
@@ -68,17 +65,16 @@ class Game:
                 
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
-                    powerup_list.append(self.powerup)
+                    pass
+                    #self.shockwave = Shockwave(self.screen, self.fast_fireball)
+                    #shockwave_list.append(self.shockwave)
+                    #self.shockwave.activate()
     
     # Metode som oppdaterer
     def update(self):
         self.player.update()
         
         current_time = pg.time.get_ticks()
-        fireball_spawn_interval = random.randint(3000, 5000)
-        homing_fireball_spawn_interval = 10_000
-        fast_fireball_spawn_interval = 20_000
-        #powerup_spawn_interval = 15_000
         
         if current_time - self.last_segment_time >= 3000:
             self.head.add_segment()
@@ -106,6 +102,13 @@ class Game:
             shoot_fireball_sound.play()
             
             self.last_time_fast_shot = pg.time.get_ticks()
+            
+        # Lager mynt-powerup objekt
+        if current_time - self.last_time_coin_collected >= coin_spawn_interval:
+            self.coin = Powerup()
+            powerup_list.append(self.coin)
+            
+            self.last_time_coin_collected = pg.time.get_ticks()
         
         for segment in segment_list:
             segment.move()
@@ -131,17 +134,30 @@ class Game:
         for fast_fireball in fast_fireball_list:
             fast_fireball.update()
             
+            if self.fast_fireball.max_bounce == 0:
+                fast_fireball_list.remove(fast_fireball)
+                self.shockwave = Shockwave(self.screen, self.fast_fireball)
+                shockwave_list.append(self.shockwave)
+            
             if fast_fireball.rect.colliderect(self.player.rect):
                 self.playing = False
                 self.running = False
+                
+        for coin in powerup_list:
+            coin.update()
+            
+            if coin.rect.colliderect(self.player.rect):
+                self.player.score += 50
+                powerup_list.remove(coin)    
     
     # Metode som tegner ting på skjermen
     def draw(self):
         # Fyller skjermen med en farge
         self.screen.fill(DARKGREY)
-        #self.screen.blit(scaled_background_image, (0, 0))
+        #self.player.shockwave()
         
-        self.display_score()
+        for shockwave in shockwave_list:
+            shockwave.update()
         
         #pg.draw.rect(self.screen, GREEN, self.player.rect)
         self.screen.blit(scaled_player_image, (self.player.rect.topleft))
@@ -170,7 +186,13 @@ class Game:
             for fast_fireball in fast_fireball_list:
                 #pg.draw.rect(self.screen, YELLOW, fast_fireball.rect)
                 self.screen.blit(scaled_fast_fireball_image, (fast_fireball.rect.topleft))
+                
+        if len(powerup_list) > 0:
+            for coin in powerup_list:
+                self.screen.blit(scaled_coin_image, (coin.rect.topleft))
     
+        self.display_score()
+        
         pg.display.flip()
     
     def display_score(self):

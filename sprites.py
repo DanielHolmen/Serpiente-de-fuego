@@ -8,8 +8,11 @@ fireball_list = []
 homing_fireball_list = []
 fast_fireball_list = []
 
+powerup_list = []
+shockwave_list = []
+
 class Player:
-    def __init__(self):
+    def __init__(self, screen_instance):
         self.image = pg.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
@@ -20,6 +23,11 @@ class Player:
         )
         
         self.score = 0
+        
+        
+        self.outer_circle_r = 10
+        self.inner_circle_r = 0
+        self.screen = screen_instance
         
     def move(self):
         keys = pg.key.get_pressed()
@@ -51,6 +59,13 @@ class Player:
             
     def add_score(self):
         self.score += 10
+        
+    def shockwave(self):
+        self.outer_circle_r += 4
+        self.inner_circle_r += 4.2
+        
+        pg.draw.circle(self.screen, GREEN, (self.rect.centerx, self.rect.centery), self.outer_circle_r)
+        pg.draw.circle(self.screen, DARKGREY, (self.rect.centerx, self.rect.centery), self.inner_circle_r)
                 
     def update(self):
         self.move()
@@ -117,7 +132,7 @@ class Head:
             new_segment.vel = pg.math.Vector2(last_segment.vel)
             
         segment_list.append(new_segment)
-
+        
 class Segment:
     
     segment_nr = 0
@@ -243,6 +258,7 @@ class FastFireball:
         self.pos = pg.math.Vector2(self.rect.center)
         self.vel = pg.math.Vector2(0, 0)
         self.speed = 10
+        self.max_bounce = 3
         
         self.player_instance = player_instance
         
@@ -256,26 +272,69 @@ class FastFireball:
     
         self.pos += self.vel * self.speed
         self.rect.center = self.pos
+        
+    def check_collision(self):
+        if self.rect.x <= 0:
+            self.rect.x = 0
+            self.vel_direction.x *= -1
+            self.max_bounce -= 1
+            self.speed += 3.3
+            
+        if self.rect.x >= WIDTH - FIREBALL_WIDTH:
+            self.rect.x = WIDTH - FIREBALL_WIDTH
+            self.vel_direction.x *= -1
+            self.max_bounce -= 1
+            
+        if self.rect.y <= 0:
+            self.rect.y = 0
+            self.vel_direction.y *= -1
+            self.max_bounce -= 1
+            self.speed += 3.3
+            
+        if self.rect.y >= HEIGHT - FIREBALL_HEIGHT:
+            self.rect.y = HEIGHT - FIREBALL_HEIGHT
+            self.vel_direction.y *= -1
+            self.max_bounce -= 1
+            self.speed += 3.3
             
     def update(self):
         self.move()
+        self.check_collision()
         
       
 class Powerup:
     def __init__(self):
-        self.image = pg.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
+        self.image = pg.Surface((COIN_WIDTH, COIN_HEIGHT))
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
     
-        self.rect.center = (random.randint(0, WIDTH), random.randint(0, HEIGHT))
+        self.rect.center = (random.randint(50, WIDTH - 50), random.randint(50, HEIGHT - 50))
         self.pos = pg.math.Vector2(self.rect.center)
         self.x = 0
         
     def move(self):
-        self.x += 0.01
-        self.rect.centery = (self.pos.y + int(25 * math.sin(self.x)))
+        self.x += 0.025
+        self.rect.centery = (self.pos.y + int(10 * math.sin(self.x)))
+        
+    def update(self):
+        self.move()
+        
+class Shockwave:
+    def __init__(self, screen_instance, fireball_instance):
+        
+        self.screen = screen_instance
+        self.fireball = fireball_instance
+        
+        self.outer_circle_r = 10
+        self.inner_circle_r = 0
         
         
+    def update(self):
+        self.outer_circle_r += 5
+        self.inner_circle_r += 5.2
+        
+        pg.draw.circle(self.screen, PURPLE, (self.fireball.rect.centerx, self.fireball.rect.centery), self.outer_circle_r)
+        pg.draw.circle(self.screen, DARKGREY, (self.fireball.rect.centerx, self.fireball.rect.centery), self.inner_circle_r)
         
         
         
