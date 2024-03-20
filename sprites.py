@@ -175,8 +175,19 @@ class Segment:
         
 class FireBall:
     def __init__(self, x, y):
+        """
         self.image = pg.Surface((FIREBALL_WIDTH, FIREBALL_HEIGHT))
         self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        """
+        
+        self.sprite_list = []
+        self.sprite_list.append(scaled_fireball_image)
+        self.sprite_list.append(scaled_fireball_image_2)
+        self.sprite_list.append(scaled_fireball_image_3)
+        
+        self.current_sprite = 0
+        self.image = self.sprite_list[self.current_sprite]
         self.rect = self.image.get_rect()
     
         self.rect.center = (x, y)
@@ -186,6 +197,14 @@ class FireBall:
         self.vel_direction = pg.math.Vector2(random.uniform(-1,1), random.uniform(-1,1))
         
         self.speed = 3
+        
+    def animate(self):
+        self.current_sprite += 0.1
+        
+        if self.current_sprite >= len(self.sprite_list):
+            self.current_sprite = 0
+            
+        self.image = self.sprite_list[int(self.current_sprite)]
     
         
     def move(self):
@@ -211,6 +230,7 @@ class FireBall:
             self.vel_direction.y *= -1
             
     def update(self):
+        self.animate()
         self.move()
         self.check_collision()
 
@@ -219,10 +239,21 @@ class FireBall:
 
 class HomingFireBall:
     def __init__(self, x, y, player_instance):
+        """
         self.image = pg.Surface((FIREBALL_WIDTH, FIREBALL_HEIGHT))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
-    
+        """
+        
+        self.sprite_list = []
+        self.sprite_list.append(scaled_homing_fireball_image)
+        self.sprite_list.append(scaled_homing_fireball_image_2)
+        self.sprite_list.append(scaled_homing_fireball_image_3)
+        
+        self.current_sprite = 0
+        self.image = self.sprite_list[self.current_sprite]
+        self.rect = self.image.get_rect()
+        
         self.rect.center = (x, y)
         
         self.pos = pg.math.Vector2(self.rect.center)
@@ -231,6 +262,14 @@ class HomingFireBall:
         self.homing_strength = 0.1
         
         self.player_instance = player_instance
+        
+    def animate(self):
+        self.current_sprite += 0.1
+        
+        if self.current_sprite >= len(self.sprite_list):
+            self.current_sprite = 0
+            
+        self.image = self.sprite_list[int(self.current_sprite)]
     
         
     def move(self):
@@ -244,6 +283,7 @@ class HomingFireBall:
             
     def update(self):
         self.move()
+        self.animate()
         
         
         
@@ -304,19 +344,42 @@ class FastFireball:
       
 class Powerup:
     def __init__(self):
+        """
         self.image = pg.Surface((COIN_WIDTH, COIN_HEIGHT))
         self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        """
+        
+        self.sprite_list = []
+        self.sprite_list.append(scaled_coin_image)
+        self.sprite_list.append(scaled_coin_image_2)
+        self.sprite_list.append(scaled_coin_image_3)
+        self.sprite_list.append(scaled_coin_image_4)
+        self.sprite_list.append(scaled_coin_image_5)
+        self.sprite_list.append(scaled_coin_image_6)
+        
+        self.current_sprite = 0
+        self.image = self.sprite_list[self.current_sprite]
         self.rect = self.image.get_rect()
     
         self.rect.center = (random.randint(50, WIDTH - 50), random.randint(50, HEIGHT - 50))
         self.pos = pg.math.Vector2(self.rect.center)
         self.x = 0
         
+    def animate(self):
+        self.current_sprite += 0.1
+        
+        if self.current_sprite >= len(self.sprite_list):
+            self.current_sprite = 0
+            
+        self.image = self.sprite_list[int(self.current_sprite)]
+        
     def move(self):
         self.x += 0.025
         self.rect.centery = (self.pos.y + int(10 * math.sin(self.x)))
         
     def update(self):
+        self.animate()
         self.move()
         
 class Shockwave:

@@ -177,12 +177,12 @@ class Game:
         if len(fireball_list) > 0:
             for fireball in fireball_list:
                 #pg.draw.rect(self.screen, LIGHTBLUE, fireball.rect)
-                self.screen.blit(scaled_fireball_image, (fireball.rect.topleft))
+                self.screen.blit(fireball.sprite_list[int(fireball.current_sprite)], (fireball.rect.topleft))
                 
         if len(homing_fireball_list) > 0:
             for homing_fireball in homing_fireball_list:
                 #pg.draw.rect(self.screen, YELLOW, homing_fireball.rect)
-                self.screen.blit(scaled_homing_fireball_image, (homing_fireball.rect.topleft))
+                self.screen.blit(homing_fireball.sprite_list[int(homing_fireball.current_sprite)], (homing_fireball.rect.topleft))
                 
         if len(fast_fireball_list) > 0:
             for fast_fireball in fast_fireball_list:
@@ -191,7 +191,7 @@ class Game:
                 
         if len(powerup_list) > 0:
             for coin in powerup_list:
-                self.screen.blit(scaled_coin_image, (coin.rect.topleft))
+                self.screen.blit(coin.sprite_list[int(coin.current_sprite)], (coin.rect.topleft))
     
         self.display_score()
         

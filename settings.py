@@ -14,7 +14,7 @@ FPS = 60
 # Farger (RGB)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-DARKGREY = (25, 25, 25)
+DARKGREY = (20, 20, 20)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 LIGHTBLUE = (100, 100, 255)
@@ -24,8 +24,8 @@ YELLOW = (252, 220, 42)
 PURPLE = (200, 75, 255)
 
 # Innstillinger til spilleren
-PLAYER_WIDTH = 45
-PLAYER_HEIGHT = 45
+PLAYER_WIDTH = 40
+PLAYER_HEIGHT = 40
 PLAYER_SPEED = 5
 
 # Innstillinger til slangehodet
@@ -37,8 +37,8 @@ SEGMENT_WIDTH = 50
 SEGMENT_HEIGHT = 50
 
 # Innstillinger til ildkuler
-FIREBALL_WIDTH = 30
-FIREBALL_HEIGHT = 30
+FIREBALL_WIDTH = 35
+FIREBALL_HEIGHT = 35
 
 # Innstillinger til powerups
 COIN_WIDTH = 50
@@ -72,18 +72,49 @@ fast_fireball_sound.set_volume(0.7)
 
 # Bilder og sprites
 player_image = pg.image.load("./Sprites/player.png")
-fireball_image = pg.image.load("./Sprites/fireball.png")
-homing_fireball_image = pg.image.load("./Sprites/homing_fireball.png")
+
+# Frames og sprites for standard ildkule
+fireball_image = pg.image.load("./Sprites/fireball/fireball.png")
+fireball_image_2 = pg.image.load("./Sprites/fireball/fireball_2.png")
+fireball_image_3 = pg.image.load("./Sprites/fireball/fireball_3.png")
+scaled_fireball_image = pg.transform.scale(fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
+scaled_fireball_image_2 = pg.transform.scale(fireball_image_2, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
+scaled_fireball_image_3 = pg.transform.scale(fireball_image_3, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
+
+# Frames og sprites for homing ildkule
+homing_fireball_image = pg.image.load("./Sprites/homing_fireball/homing_fireball.png")
+homing_fireball_image_2 = pg.image.load("./Sprites/homing_fireball/homing_fireball_2.png")
+homing_fireball_image_3 = pg.image.load("./Sprites/homing_fireball/homing_fireball_3.png")
+scaled_homing_fireball_image = pg.transform.scale(homing_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
+scaled_homing_fireball_image_2 = pg.transform.scale(homing_fireball_image_2, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
+scaled_homing_fireball_image_3 = pg.transform.scale(homing_fireball_image_3, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
+
+# Frames og sprites for mynt_powerup
+coin_image = pg.image.load("./Sprites/coin/coin.png")
+coin_image_2 = pg.image.load("./Sprites/coin/coin_2.png")
+coin_image_3 = pg.image.load("./Sprites/coin/coin_3.png")
+coin_image_4 = pg.image.load("./Sprites/coin/coin_4.png")
+coin_image_5 = pg.image.load("./Sprites/coin/coin_5.png")
+coin_image_6 = pg.image.load("./Sprites/coin/coin_6.png")
+scaled_coin_image = pg.transform.scale(coin_image, (COIN_WIDTH, COIN_HEIGHT))
+scaled_coin_image_2 = pg.transform.scale(coin_image_2, (COIN_WIDTH, COIN_HEIGHT))
+scaled_coin_image_3 = pg.transform.scale(coin_image_3, (COIN_WIDTH, COIN_HEIGHT))
+scaled_coin_image_4 = pg.transform.scale(coin_image_4, (COIN_WIDTH, COIN_HEIGHT))
+scaled_coin_image_5 = pg.transform.scale(coin_image_5, (COIN_WIDTH, COIN_HEIGHT))
+scaled_coin_image_6 = pg.transform.scale(coin_image_6, (COIN_WIDTH, COIN_HEIGHT))
+
+
+#homing_fireball_image = pg.image.load("./Sprites/homing_fireball.png")
 fast_fireball_image = pg.image.load("./Sprites/fast_fireball.png")
 segment_image = pg.image.load("./Sprites/snake_segment_2.png")
 head_image = pg.image.load("./Sprites/snake_head_2.png")
-coin_image = pg.image.load("./Sprites/coin.png")
+#coin_image = pg.image.load("./Sprites/coin.png")
 
 scaled_player_image = pg.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 scaled_fireball_image = pg.transform.scale(fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
-scaled_homing_fireball_image = pg.transform.scale(homing_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
+#scaled_homing_fireball_image = pg.transform.scale(homing_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
 scaled_fast_fireball_image = pg.transform.scale(fast_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
 scaled_segment_image = pg.transform.scale(segment_image, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
 scaled_head_image = pg.transform.scale(head_image, (HEAD_WIDTH, HEAD_HEIGHT))
-scaled_coin_image = pg.transform.scale(coin_image, (COIN_WIDTH, COIN_HEIGHT))
+#scaled_coin_image = pg.transform.scale(coin_image, (COIN_WIDTH, COIN_HEIGHT))
 
