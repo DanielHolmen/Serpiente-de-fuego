@@ -111,7 +111,10 @@ class Game:
             self.last_time_coin_collected = pg.time.get_ticks()
         
         for segment in segment_list:
-            segment.move()
+            segment.update()
+            
+            #if segment == self.head:
+                #segment.animate()
             
             if segment.rect.colliderect(self.player.rect):
                 self.playing = False
@@ -167,10 +170,10 @@ class Game:
         for segment in segment_list:
             
             if segment == self.head:
-                self.screen.blit(scaled_head_image, (self.head.rect.topleft))
+                self.screen.blit(segment.sprite_list[int(segment.current_sprite)], (segment.rect.topleft))
                 #pg.draw.rect(self.screen, RED, segment.rect)
             else:
-                self.screen.blit(scaled_segment_image, (segment.rect.topleft))
+                self.screen.blit(segment.sprite_list[int(segment.current_sprite)], (segment.rect.topleft))
         
         #pg.draw.rect(self.screen, RED, (self.head.point[0], self.head.point[1], 10, 10))
         

@@ -73,6 +73,28 @@ fast_fireball_sound.set_volume(0.7)
 # Bilder og sprites
 player_image = pg.image.load("./Sprites/player.png")
 
+# Frames og sprites for slangehodet
+head_image = pg.image.load("./Sprites/snake_head/head.png")
+head_image_2 = pg.image.load("./Sprites/snake_head/head_2.png")
+head_image_3 = pg.image.load("./Sprites/snake_head/head_3.png")
+head_image_4 = pg.image.load("./Sprites/snake_head/head_4.png")
+head_image_5 = pg.image.load("./Sprites/snake_head/head_5.png")
+scaled_head_image = pg.transform.scale(head_image, (HEAD_WIDTH, HEAD_HEIGHT))
+scaled_head_image_2 = pg.transform.scale(head_image_2, (HEAD_WIDTH, HEAD_HEIGHT))
+scaled_head_image_3 = pg.transform.scale(head_image_3, (HEAD_WIDTH, HEAD_HEIGHT))
+scaled_head_image_4 = pg.transform.scale(head_image_4, (HEAD_WIDTH, HEAD_HEIGHT))
+scaled_head_image_5 = pg.transform.scale(head_image_5, (HEAD_WIDTH, HEAD_HEIGHT))
+
+# Frames og sprites for slangesegment
+segment_image = pg.image.load("./Sprites/snake_segment/segment.png")
+segment_image_2 = pg.image.load("./Sprites/snake_segment/segment_2.png")
+segment_image_3 = pg.image.load("./Sprites/snake_segment/segment_3.png")
+segment_image_4 = pg.image.load("./Sprites/snake_segment/segment_4.png")
+scaled_segment_image = pg.transform.scale(segment_image, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
+scaled_segment_image_2 = pg.transform.scale(segment_image_2, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
+scaled_segment_image_3 = pg.transform.scale(segment_image_3, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
+scaled_segment_image_4 = pg.transform.scale(segment_image_4, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
+
 # Frames og sprites for standard ildkule
 fireball_image = pg.image.load("./Sprites/fireball/fireball.png")
 fireball_image_2 = pg.image.load("./Sprites/fireball/fireball_2.png")
@@ -103,18 +125,7 @@ scaled_coin_image_4 = pg.transform.scale(coin_image_4, (COIN_WIDTH, COIN_HEIGHT)
 scaled_coin_image_5 = pg.transform.scale(coin_image_5, (COIN_WIDTH, COIN_HEIGHT))
 scaled_coin_image_6 = pg.transform.scale(coin_image_6, (COIN_WIDTH, COIN_HEIGHT))
 
-
-#homing_fireball_image = pg.image.load("./Sprites/homing_fireball.png")
 fast_fireball_image = pg.image.load("./Sprites/fast_fireball.png")
-segment_image = pg.image.load("./Sprites/snake_segment_2.png")
-head_image = pg.image.load("./Sprites/snake_head_2.png")
-#coin_image = pg.image.load("./Sprites/coin.png")
-
 scaled_player_image = pg.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
-scaled_fireball_image = pg.transform.scale(fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
-#scaled_homing_fireball_image = pg.transform.scale(homing_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
 scaled_fast_fireball_image = pg.transform.scale(fast_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
-scaled_segment_image = pg.transform.scale(segment_image, (SEGMENT_WIDTH, SEGMENT_HEIGHT))
-scaled_head_image = pg.transform.scale(head_image, (HEAD_WIDTH, HEAD_HEIGHT))
-#scaled_coin_image = pg.transform.scale(coin_image, (COIN_WIDTH, COIN_HEIGHT))
 

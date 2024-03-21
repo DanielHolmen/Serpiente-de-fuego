@@ -74,13 +74,27 @@ class Player:
 
 class Head:
     def __init__(self):
+        
+        """
         self.image = pg.Surface((HEAD_WIDTH, HEAD_HEIGHT))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
+        """
+        
+        self.sprite_list = []
+        self.sprite_list.append(scaled_head_image)
+        self.sprite_list.append(scaled_head_image_2)
+        self.sprite_list.append(scaled_head_image_3)
+        self.sprite_list.append(scaled_head_image_4)
+        self.sprite_list.append(scaled_head_image_5)
+        
+        self.current_sprite = 0
+        self.image = self.sprite_list[self.current_sprite]
+        self.rect = self.image.get_rect()
         
         self.rect.center = (
-            WIDTH//2 - PLAYER_WIDTH//2,
-            HEIGHT//2 - PLAYER_HEIGHT//2
+            WIDTH//2 - HEAD_WIDTH//2,
+            HEIGHT//2 - HEAD_HEIGHT//2
         )
         
         self.pos = pg.math.Vector2(self.rect.center)
@@ -91,6 +105,14 @@ class Head:
         self.speed = 3
         
         self.get_point()
+        
+    def animate(self):
+        self.current_sprite += 0.1
+        
+        if self.current_sprite >= len(self.sprite_list):
+            self.current_sprite = 0
+            
+        self.image = self.sprite_list[int(self.current_sprite)]
         
     def get_point(self):
         self.point = (random.randint(0, WIDTH), random.randint(0, HEIGHT))        
@@ -133,13 +155,30 @@ class Head:
             
         segment_list.append(new_segment)
         
+    def update(self):
+        self.animate()
+        self.move()
+        
 class Segment:
     
     segment_nr = 0
     
     def __init__(self, x, y):
+        
+        """
         self.image = pg.Surface((SEGMENT_WIDTH, SEGMENT_HEIGHT))
         self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        """
+        
+        self.sprite_list = []
+        self.sprite_list.append(scaled_segment_image)
+        self.sprite_list.append(scaled_segment_image_2)
+        self.sprite_list.append(scaled_segment_image_3)
+        self.sprite_list.append(scaled_segment_image_4)
+        
+        self.current_sprite = 0
+        self.image = self.sprite_list[self.current_sprite]
         self.rect = self.image.get_rect()
         
         self.rect.center = (x, y)
@@ -151,6 +190,14 @@ class Segment:
         self.vel = pg.math.Vector2(0, 0)
     
         self.speed = 3
+        
+    def animate(self):
+        self.current_sprite += 0.1
+        
+        if self.current_sprite >= len(self.sprite_list):
+            self.current_sprite = 0
+            
+        self.image = self.sprite_list[int(self.current_sprite)]
         
     def move(self):
         if self.segment_nr > 0:  # Skip the head segment
@@ -169,7 +216,10 @@ class Segment:
             
             self.pos += self.vel * self.speed
             self.rect.center = self.pos
-        
+            
+    def update(self):
+        self.animate()
+        self.move()
         
         
         
