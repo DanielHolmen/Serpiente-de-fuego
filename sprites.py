@@ -202,7 +202,7 @@ class Segment:
     def move(self):
         if self.segment_nr > 0:  # Skip the head segment
             # Calculate the direction to follow the previous segment
-            previous_segment = segment_list[self.segment_nr - 1]
+            previous_segment = segment_list[self.segment_nr-1]
             direction = pg.math.Vector2(previous_segment.pos - self.pos)
             distance = direction.length()
             direction.normalize_ip()
