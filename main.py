@@ -35,7 +35,6 @@ class Game:
         
         self.player = Player(self.screen)
 
-
         #attributter som styrer når ildkuler osv skal dukke opp
         self.last_segment_time = pg.time.get_ticks()
         self.last_time_coin_collected = pg.time.get_ticks()
@@ -94,7 +93,7 @@ class Game:
     
     #Metode som viser Main Menu
     def show_main_menu(self):
-        self.screen.fill("BLACK")
+        self.screen.fill(DARKGREY)
         menu_sound.play(-1)
         
         self.main_menu_active = True
