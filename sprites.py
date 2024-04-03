@@ -25,23 +25,19 @@ class Player:
         self.score = 0
         
         
-        self.outer_circle_r = 10
-        self.inner_circle_r = 0
-        self.screen = screen_instance
-        
     def move(self):
         keys = pg.key.get_pressed()
         
-        if keys[pg.K_LEFT]:
+        if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.rect.x -= PLAYER_SPEED
             
-        if keys[pg.K_RIGHT]:
+        if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.rect.x += PLAYER_SPEED
             
-        if keys[pg.K_UP]:
+        if keys[pg.K_UP] or keys[pg.K_w]:
             self.rect.y -= PLAYER_SPEED
             
-        if keys[pg.K_DOWN]:
+        if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.rect.y += PLAYER_SPEED
             
     def check_collision(self):
@@ -66,14 +62,7 @@ class Player:
         
 
 class Head:
-    def __init__(self):
-        
-        """
-        self.image = pg.Surface((HEAD_WIDTH, HEAD_HEIGHT))
-        self.image.fill(RED)
-        self.rect = self.image.get_rect()
-        """
-        
+    def __init__(self):       
         self.sprite_list = []
         self.sprite_list.append(scaled_head_image)
         self.sprite_list.append(scaled_head_image_2)
@@ -94,7 +83,6 @@ class Head:
         self.vel = pg.math.Vector2(0, 0)
         self.acc = pg.math.Vector2(0, 0)
         
-        #self.acc_value = 0.5
         self.speed = 3
         
         self.get_point()
@@ -134,7 +122,6 @@ class Head:
         
         if self.distance.length() <= 100:
             self.get_point()
-            #self.add_segment()
             
     def add_segment(self):
         new_segment = Segment(self.rect.centerx, self.rect.centery)
@@ -142,8 +129,7 @@ class Head:
         if segment_list:
             last_segment = segment_list[-1]
             
-            new_segment.pos = last_segment.pos - self.direction * (2 * PLAYER_WIDTH)  # Adjust the multiplier as needed
-            #new_segment.pos = pg.math.Vector2(last_segment.pos)
+            new_segment.pos = last_segment.pos - self.direction * (2 * PLAYER_WIDTH)
             new_segment.vel = pg.math.Vector2(last_segment.vel)
             
         segment_list.append(new_segment)
@@ -157,13 +143,6 @@ class Segment:
     segment_nr = 0
     
     def __init__(self, x, y):
-        
-        """
-        self.image = pg.Surface((SEGMENT_WIDTH, SEGMENT_HEIGHT))
-        self.image.fill(RED)
-        self.rect = self.image.get_rect()
-        """
-        
         self.sprite_list = []
         self.sprite_list.append(scaled_segment_image)
         self.sprite_list.append(scaled_segment_image_2)
@@ -218,12 +197,6 @@ class Segment:
         
 class FireBall:
     def __init__(self, x, y):
-        """
-        self.image = pg.Surface((FIREBALL_WIDTH, FIREBALL_HEIGHT))
-        self.image.fill(RED)
-        self.rect = self.image.get_rect()
-        """
-        
         self.sprite_list = []
         self.sprite_list.append(scaled_fireball_image)
         self.sprite_list.append(scaled_fireball_image_2)
@@ -282,12 +255,6 @@ class FireBall:
 
 class HomingFireBall:
     def __init__(self, x, y, player_instance):
-        """
-        self.image = pg.Surface((FIREBALL_WIDTH, FIREBALL_HEIGHT))
-        self.image.fill(RED)
-        self.rect = self.image.get_rect()
-        """
-        
         self.sprite_list = []
         self.sprite_list.append(scaled_homing_fireball_image)
         self.sprite_list.append(scaled_homing_fireball_image_2)
@@ -387,12 +354,6 @@ class FastFireball:
       
 class Powerup:
     def __init__(self):
-        """
-        self.image = pg.Surface((COIN_WIDTH, COIN_HEIGHT))
-        self.image.fill(WHITE)
-        self.rect = self.image.get_rect()
-        """
-        
         self.sprite_list = []
         self.sprite_list.append(scaled_coin_image)
         self.sprite_list.append(scaled_coin_image_2)
@@ -441,6 +402,3 @@ class Shockwave:
         
         pg.draw.circle(self.screen, PURPLE, (self.fireball.rect.centerx, self.fireball.rect.centery), self.outer_circle_r)
         pg.draw.circle(self.screen, DARKGREY, (self.fireball.rect.centerx, self.fireball.rect.centery), self.inner_circle_r)
-        
-        
-        
