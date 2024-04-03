@@ -189,6 +189,7 @@ class Game:
                 #segment.animate()
             
             if segment.rect.colliderect(self.player.rect):
+                self.stop_audio()
                 self.end_game()
                 
                 
@@ -197,6 +198,7 @@ class Game:
             fireball.update()
             
             if fireball.rect.colliderect(self.player.rect):
+                self.stop_audio()
                 self.end_game()
                 
                 
@@ -204,6 +206,7 @@ class Game:
             homing_fireball.update()
             
             if homing_fireball.rect.colliderect(self.player.rect):
+                self.stop_audio()
                 self.end_game()
             
                 
@@ -218,6 +221,7 @@ class Game:
                 explosion_sound.play()
             
             if fast_fireball.rect.colliderect(self.player.rect):
+                self.stop_audio()
                 self.end_game()
                 
         for coin in powerup_list:
@@ -225,7 +229,10 @@ class Game:
             
             if coin.rect.colliderect(self.player.rect):
                 self.player.score += 50
-                powerup_list.remove(coin)    
+                powerup_list.remove(coin)
+                
+        #if fast_fire_ball_sound.get_busy():
+            
 
     # Metode som tegner ting på skjermen
     def draw(self):
@@ -275,6 +282,13 @@ class Game:
     def display_score(self):
         text_img = self.font.render(f"{self.player.score}", True, WHITE)
         self.screen.blit(text_img, (WIDTH - 100, 20))
+        
+    def stop_audio(self):
+        segment_sound.stop()
+        fireball_sound.stop()
+        homing_fireball_sound.stop()
+        fast_fireball_sound.stop()
+        explosion_sound.stop()
 
 
 game_object = Game()
