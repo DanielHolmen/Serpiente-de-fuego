@@ -8,8 +8,8 @@ pg.init()
 
 BG = pg.image.load("bilder/background_menu.png")
 
-SCREEN = pg.display.set_mode((1280, 720))
-pg.display.set_caption("Serpiente de Fuego")
+SCREEN = pg.display.set_mode(SIZE)
+pg.display.set_caption("Serpiente")
 
 
 def get_font(size):  # Returns Press-Start-2P in the desired size
@@ -19,7 +19,7 @@ def get_font(size):  # Returns Press-Start-2P in the desired size
 class Game:
     def __init__(self):
         # Lager hovedvinduet
-        self.screen = pg.display.set_mode(SIZE)
+        self.screen = pg.display.set_mode(SIZE, pg.FULLSCREEN)
 
         # Lager en klokke
         self.clock = pg.time.Clock()
@@ -30,7 +30,6 @@ class Game:
 
         # Attributt som styrer om spillet skal kjøres
         self.running = True  # Initially set to False
-        self.playing = False  # Initially set to False
         
         self.main_menu_active = True
         
@@ -47,7 +46,6 @@ class Game:
 
     # Metode for å starte et nytt spill
     def new(self):
-            self.playing = True
             self.reset_game_state()
             self.head = Head()
             segment_list.insert(0, self.head)
@@ -65,7 +63,6 @@ class Game:
             
     def end_game(self):
         self.running = False
-        self.playing = False
         self.show_main_menu()
    
 
@@ -77,6 +74,14 @@ class Game:
         homing_fireball_list.clear()
         fast_fireball_list.clear()
         powerup_list.clear()
+        
+        self.last_segment_time = pg.time.get_ticks()
+        self.last_time_coin_collected = pg.time.get_ticks()
+
+        self.last_time_shot = pg.time.get_ticks()
+        self.last_time_homing_shot = pg.time.get_ticks()
+        self.last_time_fast_shot = pg.time.get_ticks()
+        
         # Reset player score
         self.player.score = 0
         self.player.rect.center = (
@@ -92,15 +97,15 @@ class Game:
             SCREEN.fill("BLACK")
             MENU_MOUSE_POS = pg.mouse.get_pos()
 
-            MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")
-            MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+            MENU_TEXT = get_font(70).render("SERPIENTE", True, TITLE_COLOR)
+            MENU_RECT = MENU_TEXT.get_rect(center=(WIDTH//2, 100))
 
             PLAY_BUTTON = Button(image=pg.image.load("Bilder/Play Rect.png"), pos=(640, 250),
-                                 text_input="PLAY", font=get_font(75))
+                                 text_input="PLAY", font=get_font(60))
             OPTIONS_BUTTON = Button(image=pg.image.load("Bilder/Options Rect.png"), pos=(640, 400),
-                                    text_input="OPTIONS", font=get_font(75))
+                                    text_input="OPTIONS", font=get_font(60))
             QUIT_BUTTON = Button(image=pg.image.load("Bilder/Quit Rect.png"), pos=(640, 550),
-                                 text_input="QUIT", font=get_font(75))
+                                 text_input="QUIT", font=get_font(60))
 
             SCREEN.blit(MENU_TEXT, MENU_RECT)
 
@@ -117,7 +122,7 @@ class Game:
                         self.new()
                         self.main_menu_active = False
                     if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        options()
+                        #options()
                         self.main_menu_active = False
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         pg.quit()
@@ -128,11 +133,10 @@ class Game:
 
     # Metode som håndterer hendelser
     def events(self):
-        if self.playing:
+        if self.running:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    self.playing = False
-                    self.running = False
+                    self.end_game()
                     
                     
                 
