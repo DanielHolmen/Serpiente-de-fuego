@@ -172,17 +172,15 @@ class Segment:
         self.image = self.sprite_list[int(self.current_sprite)]
         
     def move(self):
-        if self.segment_nr > 0:  # Skip the head segment
-            # Calculate the direction to follow the previous segment
+        if self.segment_nr > 0:
+            
             previous_segment = segment_list[self.segment_nr-1]
             direction = pg.math.Vector2(previous_segment.pos - self.pos)
             distance = direction.length()
             direction.normalize_ip()
 
-            # Apply acceleration towards the previous segment
-            acceleration = direction * 0.1  # Adjust acceleration as needed
+            acceleration = direction * 0.1 
 
-            # Update velocity and position based on acceleration
             self.vel += acceleration
             self.vel = self.vel.normalize()
             
