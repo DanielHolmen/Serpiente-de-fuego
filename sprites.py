@@ -60,13 +60,6 @@ class Player:
     def add_score(self):
         self.score += 10
         
-    def shockwave(self):
-        self.outer_circle_r += 4
-        self.inner_circle_r += 4.2
-        
-        pg.draw.circle(self.screen, GREEN, (self.rect.centerx, self.rect.centery), self.outer_circle_r)
-        pg.draw.circle(self.screen, DARKGREY, (self.rect.centerx, self.rect.centery), self.inner_circle_r)
-                
     def update(self):
         self.move()
         self.check_collision()

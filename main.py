@@ -62,6 +62,11 @@ class Game:
             self.events()
             self.update()
             self.draw()
+            
+    def end_game(self):
+        self.running = False
+        self.playing = False
+        self.show_main_menu()
    
 
     # Method to reset game state after game over
@@ -91,11 +96,11 @@ class Game:
             MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
             PLAY_BUTTON = Button(image=pg.image.load("Bilder/Play Rect.png"), pos=(640, 250),
-                                 text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+                                 text_input="PLAY", font=get_font(75))
             OPTIONS_BUTTON = Button(image=pg.image.load("Bilder/Options Rect.png"), pos=(640, 400),
-                                    text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+                                    text_input="OPTIONS", font=get_font(75))
             QUIT_BUTTON = Button(image=pg.image.load("Bilder/Quit Rect.png"), pos=(640, 550),
-                                 text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+                                 text_input="QUIT", font=get_font(75))
 
             SCREEN.blit(MENU_TEXT, MENU_RECT)
 
@@ -110,7 +115,6 @@ class Game:
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                         self.new()
-                        print("2")# Start a new game
                         self.main_menu_active = False
                     if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
                         options()
@@ -124,22 +128,6 @@ class Game:
 
     # Metode som håndterer hendelser
     def events(self):
-        """
-        # Går gjennom hendelser (events)
-        for event in pg.event.get():
-            # Sjekker om vi ønsker å lukke vinduet
-            if event.type == pg.QUIT:
-                if self.playing:
-                    self.playing = False
-                self.running = False  # Spillet skal avsluttes
-
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    pass
-                    # self.shockwave = Shockwave(self.screen, self.fast_fireball)
-                    # shockwave_list.append(self.shockwave)
-                    # self.shockwave.activate()
-        """
         if self.playing:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -147,29 +135,13 @@ class Game:
                     self.running = False
                     
                     
-                    
-                elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_SPACE:
-                        pass  # Handle space key event here
-        # Handle events in the main menu
+                
         else:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
-                elif event.type == pg.MOUSEBUTTONDOWN:
-                    MENU_MOUSE_POS = pg.mouse.get_pos()
-                    if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        self.new()
-                        print("1")
-                        self.main_menu_active = False
-                    elif OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        options()
-                        self.main_menu_active = False
-                    elif QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        pg.quit()
-                        sys.exit()
-                        self.main_menu_active = False
+               
     # Metode som oppdaterer
     def update(self):
         self.player.update()
@@ -217,9 +189,7 @@ class Game:
                 #segment.animate()
             
             if segment.rect.colliderect(self.player.rect):
-                self.playing = False
-                self.running = False
-                self.show_main_menu()
+                self.end_game()
                 
                 
         
@@ -227,19 +197,14 @@ class Game:
             fireball.update()
             
             if fireball.rect.colliderect(self.player.rect):
-                self.playing = False
-                self.running = False
-                
-                self.show_main_menu()
+                self.end_game()
                 
                 
         for homing_fireball in homing_fireball_list:
             homing_fireball.update()
             
             if homing_fireball.rect.colliderect(self.player.rect):
-                self.playing = False
-                self.running = False
-                self.show_main_menu()
+                self.end_game()
             
                 
         for fast_fireball in fast_fireball_list:
@@ -253,9 +218,7 @@ class Game:
                 explosion_sound.play()
             
             if fast_fireball.rect.colliderect(self.player.rect):
-                self.playing = False
-                self.running = False
-                self.show_main_menu()
+                self.end_game()
                 
         for coin in powerup_list:
             coin.update()

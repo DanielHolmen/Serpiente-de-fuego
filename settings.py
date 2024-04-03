@@ -22,6 +22,8 @@ GREY = (142, 142, 142)
 LIGHTRED = (255, 100, 100)
 YELLOW = (252, 220, 42)
 PURPLE = (200, 75, 255)
+BASE_COLOR = (215,252,212)
+
 
 # Innstillinger til spilleren
 PLAYER_WIDTH = 40
@@ -128,4 +130,3 @@ scaled_coin_image_6 = pg.transform.scale(coin_image_6, (COIN_WIDTH, COIN_HEIGHT)
 fast_fireball_image = pg.image.load("./Sprites/fast_fireball.png")
 scaled_player_image = pg.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 scaled_fast_fireball_image = pg.transform.scale(fast_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
-
