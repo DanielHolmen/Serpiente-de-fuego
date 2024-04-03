@@ -44,11 +44,12 @@ class Game:
 
     # Metode for å starte et nytt spill
     def new(self):
-            self.reset_game_state()
-            self.head = Head()
-            segment_list.insert(0, self.head)
-            self.running = True
-            self.run()
+        menu_sound.stop()
+        self.reset_game_state()
+        self.head = Head()
+        segment_list.insert(0, self.head)
+        self.running = True
+        self.run()
 
     # Metode som kjører spillet
     def run(self):
@@ -89,6 +90,8 @@ class Game:
     #Metode som viser Main Menu
     def show_main_menu(self):
         SCREEN.fill("BLACK")
+        menu_sound.play(-1)
+        
         self.main_menu_active = True
         while self.main_menu_active:
             MENU_MOUSE_POS = pg.mouse.get_pos()

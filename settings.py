@@ -68,10 +68,12 @@ fireball_sound = pg.mixer.Sound("./Sound/fireball.wav")
 homing_fireball_sound = pg.mixer.Sound("./Sound/homing_fireball.wav")
 fast_fireball_sound = pg.mixer.Sound("./Sound/fast_fireball.wav")
 explosion_sound = pg.mixer.Sound("./Sound/explosion.wav")
+menu_sound = pg.mixer.Sound("./Sound/menu.wav")
 
 segment_sound.set_volume(0.1)
 homing_fireball_sound.set_volume(0.5)
 fast_fireball_sound.set_volume(0.7)
+menu_sound.set_volume(0.2)
 
 
 
