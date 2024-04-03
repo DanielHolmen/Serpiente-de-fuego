@@ -17,7 +17,7 @@ def get_font(font_size):
 class Game:
     def __init__(self):
         # Lager hovedvinduet
-        self.screen = pg.display.set_mode(SIZE, pg.FULLSCREEN)
+        self.screen = pg.display.set_mode(SIZE)
 
         # Lager en klokke
         self.clock = pg.time.Clock()
