@@ -1,11 +1,14 @@
+#importer nødvendige filer og biblioteker
 import pygame as pg
 import sys
 from settings import *
 from sprites import *
 from button import Button
 
+#initierer pygame
 pg.init()
 
+#lager skjermen
 SCREEN = pg.display.set_mode(SIZE)
 pg.display.set_caption("Serpiente")
 
@@ -13,7 +16,7 @@ pg.display.set_caption("Serpiente")
 def get_font(font_size): 
     return pg.font.Font("Bilder/font.ttf", font_size)
 
-
+#spillklassen
 class Game:
     def __init__(self):
         # Lager hovedvinduet
@@ -21,7 +24,8 @@ class Game:
 
         # Lager en klokke
         self.clock = pg.time.Clock()
-
+        
+        #lager font
         self.font = pg.font.SysFont("Arial", 26)
         self.title_font = pg.font.SysFont("Arial", 60)
         self.instructions_font = pg.font.SysFont("Arial", 30)
@@ -33,6 +37,8 @@ class Game:
         
         self.player = Player(SCREEN)
 
+
+        #attributter som styrer når ildkuler osv skal dukke opp
         self.last_segment_time = pg.time.get_ticks()
         self.last_time_coin_collected = pg.time.get_ticks()
 
@@ -58,13 +64,14 @@ class Game:
             self.events()
             self.update()
             self.draw()
-            
+    
+    #metode som avslutter spillet
     def end_game(self):
         self.running = False
         self.show_main_menu()
    
 
-    #Resetter gamet når man taper
+    #Resetter spillet når man taper
     def reset_game_state(self):
         segment_list.clear()
         fireball_list.clear()
@@ -79,7 +86,7 @@ class Game:
         self.last_time_homing_shot = pg.time.get_ticks()
         self.last_time_fast_shot = pg.time.get_ticks()
         
-        #Nulstiller score
+        #Nullstiller score
         self.player.score = 0
         self.player.rect.center = (
             100,
@@ -94,11 +101,15 @@ class Game:
         
         self.main_menu_active = True
         while self.main_menu_active:
+            
+            #henter museposisjon
             MENU_MOUSE_POS = pg.mouse.get_pos()
-
+            
+            #oppretter spilltittel
             MENU_TEXT = get_font(70).render("SERPIENTE", True, TITLE_COLOR)
             MENU_RECT = MENU_TEXT.get_rect(center=(WIDTH//2, 100))
 
+            #lager knapper
             PLAY_BUTTON = Button(image=pg.image.load("Bilder/Play Rect.png"), pos=(WIDTH//2, 250),
                                  text_input="PLAY", font=get_font(60))
             OPTIONS_BUTTON = Button(image=pg.image.load("Bilder/Options Rect.png"), pos=(WIDTH//2, 400),
@@ -107,11 +118,13 @@ class Game:
                                  text_input="QUIT", font=get_font(60))
 
             SCREEN.blit(MENU_TEXT, MENU_RECT)
-
+            
+            #endrer farge på knappene når man har musen over
             for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(SCREEN)
-
+            
+            #sjekker om vi trykker på de ulike knappene
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -149,6 +162,8 @@ class Game:
         
         current_time = pg.time.get_ticks()
         
+        
+        #styrer når vi legger til nye segmenter og ildkuler
         if current_time - self.last_segment_time >= 3000:
             self.head.add_segment()
             segment_sound.play()
@@ -182,7 +197,8 @@ class Game:
             powerup_list.append(self.coin)
             
             self.last_time_coin_collected = pg.time.get_ticks()
-        
+            
+        #oppdaterer objekter
         for segment in segment_list:
             segment.update()
             
@@ -209,6 +225,7 @@ class Game:
         for fast_fireball in fast_fireball_list:
             fast_fireball.update()
             
+            #lager eksplosjonen til de lilla ildkulene
             if self.fast_fireball.max_bounce == 0:
                 fast_fireball_list.remove(fast_fireball)
                 self.shockwave = Shockwave(self.screen, self.fast_fireball)
@@ -237,6 +254,7 @@ class Game:
         for shockwave in shockwave_list:
             shockwave.update()
         
+        #laster inn grafikk
         self.screen.blit(scaled_player_image, (self.player.rect.topleft))
         
         for segment in segment_list:
@@ -264,11 +282,13 @@ class Game:
     
         self.display_score()
         pg.display.flip()
-        
+    
+    #metode som viser score
     def display_score(self):
         text_img = self.font.render(f"{self.player.score}", True, WHITE)
         self.screen.blit(text_img, (WIDTH - 100, 20))
         
+    #metode som stopper all lyd    
     def stop_audio(self):
         segment_sound.stop()
         fireball_sound.stop()
@@ -276,7 +296,7 @@ class Game:
         fast_fireball_sound.stop()
         explosion_sound.stop()
 
-
+#lager spillobjekt
 game_object = Game()
 game_object.show_main_menu()
 
