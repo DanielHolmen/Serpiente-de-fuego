@@ -20,7 +20,7 @@ class Player:
         
         self.rect.center = (
             100,
-            100
+            400
         )
         
         self.score = 0

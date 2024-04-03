@@ -27,6 +27,10 @@ BASE_COLOR = (255, 175, 69)
 HOVER_COLOR = (255, 220, 100)
 TITLE_COLOR = (251, 109, 72)
 
+# Fontstørrelser
+FONT_SIZE = 26
+TITLE_FONT_SIZE = 60
+INSTRUCTIONS_FONT_SIZE = 30
 
 # Innstillinger til spilleren
 PLAYER_WIDTH = 40
@@ -60,7 +64,7 @@ fast_fireball_spawn_interval = random.randint(12_000, 16_000)
 coin_spawn_interval = 15_000
 
 
-# Lydeffekter og mussikk
+# Lydeffekter og musikk
 pg.mixer.init()
 
 segment_sound = pg.mixer.Sound("./Sound/segment.wav")
@@ -69,16 +73,17 @@ homing_fireball_sound = pg.mixer.Sound("./Sound/homing_fireball.wav")
 fast_fireball_sound = pg.mixer.Sound("./Sound/fast_fireball.wav")
 explosion_sound = pg.mixer.Sound("./Sound/explosion.wav")
 menu_sound = pg.mixer.Sound("./Sound/menu.wav")
+coin_sound = pg.mixer.Sound("./Sound/coin.wav")
 
 segment_sound.set_volume(0.1)
 homing_fireball_sound.set_volume(0.5)
 fast_fireball_sound.set_volume(0.7)
 menu_sound.set_volume(0.2)
+coin_sound.set_volume(0.5)
 
-
-
-# Bilder og sprites
+# Bilde for spiller
 player_image = pg.image.load("./Sprites/player.png")
+scaled_player_image = pg.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 
 # Frames og sprites for slangehodet
 head_image = pg.image.load("./Sprites/snake_head/head.png")
@@ -133,5 +138,4 @@ scaled_coin_image_5 = pg.transform.scale(coin_image_5, (COIN_WIDTH, COIN_HEIGHT)
 scaled_coin_image_6 = pg.transform.scale(coin_image_6, (COIN_WIDTH, COIN_HEIGHT))
 
 fast_fireball_image = pg.image.load("./Sprites/fast_fireball.png")
-scaled_player_image = pg.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 scaled_fast_fireball_image = pg.transform.scale(fast_fireball_image, (FIREBALL_WIDTH, FIREBALL_HEIGHT))
