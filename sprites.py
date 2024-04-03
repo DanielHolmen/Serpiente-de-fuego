@@ -3,14 +3,15 @@ import random
 from settings import *
 import math
 
+#Lister som inneholder spillobjekter
 segment_list = []
 fireball_list = []
 homing_fireball_list = []
 fast_fireball_list = []
-
 powerup_list = []
 shockwave_list = []
 
+#Klasse for spiller
 class Player:
     def __init__(self, screen_instance):
         self.image = pg.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
@@ -23,7 +24,6 @@ class Player:
         )
         
         self.score = 0
-        
         
     def move(self):
         keys = pg.key.get_pressed()
@@ -60,9 +60,10 @@ class Player:
         self.move()
         self.check_collision()
         
-
+#Klasse for hodet til slangen
 class Head:
-    def __init__(self):       
+    def __init__(self):
+        #Liste for alle sprites til animasjon
         self.sprite_list = []
         self.sprite_list.append(scaled_head_image)
         self.sprite_list.append(scaled_head_image_2)
@@ -96,10 +97,12 @@ class Head:
         self.image = self.sprite_list[int(self.current_sprite)]
         
     def get_point(self):
+        #Lager et punkt på brettet og definerer retning og avstand til punktet som vektorer
         self.point = (random.randint(0, WIDTH), random.randint(0, HEIGHT))        
         self.distance = pg.math.Vector2(self.point[0] - self.pos.x, self.point[1] - self.pos.y).length()
         self.direction = pg.math.Vector2(self.point[0] - self.pos.x, self.point[1] - self.pos.y)
         
+        #Hvis avstanden til punktet er mindre enn 200 lages et nytt punkt
         if self.distance > 200:
             self.get_point()
             
@@ -107,29 +110,39 @@ class Head:
             self.direction = self.direction.normalize()
         
     def move(self):
+        #"Tracker" kontinuerlig avstanden til punktet
         self.distance = pg.math.Vector2(self.point[0] - self.pos.x, self.point[1] - self.pos.y)
         
         self.target_acc = self.direction
         
+        #Endring av fartsretningen er basert på en smoothing-faktor
         smoothing_factor = 0.04
         self.acc = self.acc.lerp(self.target_acc, smoothing_factor)
         
+        #Legger oppdaterer fartsretningen
         self.vel += self.acc
         self.vel = self.vel.normalize()
     
+        #Oppdaterer posisjonen basert på fartsretningen og en fartskonstant
         self.pos += self.vel * self.speed
         self.rect.center = self.pos
         
+        #Hvis hodet er kommet innenfor en bestemt rekkevidde fra punktet, lages et nytt punkt
         if self.distance.length() <= 100:
             self.get_point()
             
     def add_segment(self):
+        #Lager det første segmentet som skal ha utgangsposisjon i sentrum av slange-hodet
         new_segment = Segment(self.rect.centerx, self.rect.centery)
         
+        #Hvis det finnes segmenter i listen 
         if segment_list:
             last_segment = segment_list[-1]
             
-            new_segment.pos = last_segment.pos - self.direction * (2 * PLAYER_WIDTH)
+            #Nye segmenter som lages etter det første skal få en posisjon basert på fartsretningen til segmentet foran i listen
+            new_segment.pos = last_segment.pos - self.direction * 80
+            
+            #Gir det nye segmentet som lages farten til det til foran den selv i listen
             new_segment.vel = pg.math.Vector2(last_segment.vel)
             
         segment_list.append(new_segment)
@@ -138,11 +151,13 @@ class Head:
         self.animate()
         self.move()
         
+#Klasse for segmenter til slangen
 class Segment:
     
     segment_nr = 0
     
     def __init__(self, x, y):
+        #Liste for alle sprites til animasjon
         self.sprite_list = []
         self.sprite_list.append(scaled_segment_image)
         self.sprite_list.append(scaled_segment_image_2)
@@ -172,20 +187,21 @@ class Segment:
         self.image = self.sprite_list[int(self.current_sprite)]
         
     def move(self):
-        if self.segment_nr > 0:  # Skip the head segment
-            # Calculate the direction to follow the previous segment
+        #Hopper over slangehodet
+        if self.segment_nr > 0:  
+            #Finner retningen segmentet må følge for å bevege seg mot segmentet som befinner seg foran i listen
             previous_segment = segment_list[self.segment_nr-1]
             direction = pg.math.Vector2(previous_segment.pos - self.pos)
-            distance = direction.length()
             direction.normalize_ip()
 
-            # Apply acceleration towards the previous segment
-            acceleration = direction * 0.1  # Adjust acceleration as needed
+            #Gir en akselerasjon mot segmentet foran i lista
+            acceleration = direction * 0.1
 
-            # Update velocity and position based on acceleration
+            #Oppdaterer farten til segmentet
             self.vel += acceleration
             self.vel = self.vel.normalize()
             
+            #Oppdaterer posisjonen til segmentet
             self.pos += self.vel * self.speed
             self.rect.center = self.pos
             
@@ -197,6 +213,7 @@ class Segment:
         
 class FireBall:
     def __init__(self, x, y):
+        #Liste for alle sprites til animasjon
         self.sprite_list = []
         self.sprite_list.append(scaled_fireball_image)
         self.sprite_list.append(scaled_fireball_image_2)
@@ -238,7 +255,6 @@ class FireBall:
         if self.pos.x >= WIDTH - FIREBALL_WIDTH//2:
             self.vel_direction.x *= -1
     
-    
         if self.pos.y <= FIREBALL_HEIGHT//2:
             self.vel_direction.y *= -1
         
@@ -255,6 +271,7 @@ class FireBall:
 
 class HomingFireBall:
     def __init__(self, x, y, player_instance):
+        #Liste for alle sprites til animasjon
         self.sprite_list = []
         self.sprite_list.append(scaled_homing_fireball_image)
         self.sprite_list.append(scaled_homing_fireball_image_2)
@@ -283,6 +300,7 @@ class HomingFireBall:
     
         
     def move(self):
+        #Trekker en vektor mellom homing ildkule og spiller
         self.vel_direction = pg.math.Vector2(self.player_instance.rect.center[0] - self.pos.x, self.player_instance.rect.center[1] - self.pos.y)
         
         self.vel = self.vel_direction * self.homing_strength
@@ -310,13 +328,13 @@ class FastFireball:
         self.speed = 10
         self.max_bounce = 3
         
+        #Gir ildkulen tilgang til spilleren
         self.player_instance = player_instance
         
+        #Trekker en vektor mellom ildkule og spilleren
         self.vel_direction = pg.math.Vector2(self.player_instance.rect.center[0] - self.pos.x, self.player_instance.rect.center[1] - self.pos.y)
         
-    def move(self):
-        #self.vel_direction = pg.math.Vector2(self.player_instance.rect.center[0] - self.pos.x, self.player_instance.rect.center[1] - self.pos.y)
-        
+    def move(self):        
         self.vel = self.vel_direction
         self.vel = self.vel.normalize()    
     
@@ -334,6 +352,7 @@ class FastFireball:
             self.rect.x = WIDTH - FIREBALL_WIDTH
             self.vel_direction.x *= -1
             self.max_bounce -= 1
+            self.speed += 3.3
             
         if self.rect.y <= 0:
             self.rect.y = 0
@@ -351,9 +370,10 @@ class FastFireball:
         self.move()
         self.check_collision()
         
-      
+#Klasse for powerups
 class Powerup:
     def __init__(self):
+        #Liste for alle sprites til animasjon
         self.sprite_list = []
         self.sprite_list.append(scaled_coin_image)
         self.sprite_list.append(scaled_coin_image_2)
@@ -386,19 +406,27 @@ class Powerup:
         self.animate()
         self.move()
         
+#Klasse for shockwave-effekt
 class Shockwave:
     def __init__(self, screen_instance, fireball_instance):
         
+        #Gir shockwave-objekter tilgang til screen og fast-fireball
         self.screen = screen_instance
         self.fireball = fireball_instance
         
+        #Shockwaven består av to sirkler med ulik radius
         self.outer_circle_r = 10
         self.inner_circle_r = 0
         
         
     def update(self):
+        #Den indre sirkelen utvider seg raskere (gir en shockwave effekt)
         self.outer_circle_r += 5
         self.inner_circle_r += 5.2
         
+        #Tegner de to sirklene som danner shockwaven (indre kule har samme farge som bakgrunnen)
         pg.draw.circle(self.screen, PURPLE, (self.fireball.rect.centerx, self.fireball.rect.centery), self.outer_circle_r)
         pg.draw.circle(self.screen, DARKGREY, (self.fireball.rect.centerx, self.fireball.rect.centery), self.inner_circle_r)
+        
+        
+        
