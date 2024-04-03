@@ -8,8 +8,6 @@ from button import Button
 #initierer pygame
 pg.init()
 
-#lager skjermen
-SCREEN = pg.display.set_mode(SIZE)
 pg.display.set_caption("Serpiente")
 
 
@@ -26,17 +24,16 @@ class Game:
         self.clock = pg.time.Clock()
         
         #lager font
-        self.font = pg.font.SysFont("Arial", 26)
-        self.title_font = pg.font.SysFont("Arial", 60)
-        self.instructions_font = pg.font.SysFont("Arial", 30)
+        self.font = pg.font.SysFont("Arial", FONT_SIZE)
+        self.title_font = pg.font.SysFont("Arial", TITLE_FONT_SIZE)
+        self.instructions_font = pg.font.SysFont("Arial", INSTRUCTIONS_FONT_SIZE)
 
         # Attributt som styrer om spillet skal kjøres
         self.running = True  
         
         self.main_menu_active = True
         
-        self.player = Player(SCREEN)
-
+        self.player = Player(self.screen)
 
         #attributter som styrer når ildkuler osv skal dukke opp
         self.last_segment_time = pg.time.get_ticks()
@@ -96,7 +93,7 @@ class Game:
     
     #Metode som viser Main Menu
     def show_main_menu(self):
-        SCREEN.fill("BLACK")
+        self.screen.fill(DARKGREY)
         menu_sound.play(-1)
         
         self.main_menu_active = True
@@ -117,12 +114,12 @@ class Game:
             QUIT_BUTTON = Button(image=pg.image.load("Bilder/Quit Rect.png"), pos=(WIDTH//2, 550),
                                  text_input="QUIT", font=get_font(60))
 
-            SCREEN.blit(MENU_TEXT, MENU_RECT)
+            self.screen.blit(MENU_TEXT, MENU_RECT)
             
             #endrer farge på knappene når man har musen over
             for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
-                button.update(SCREEN)
+                button.update(self.screen)
             
             #sjekker om vi trykker på de ulike knappene
             for event in pg.event.get():
@@ -241,6 +238,7 @@ class Game:
             coin.update()
             
             if coin.rect.colliderect(self.player.rect):
+                coin_sound.play()
                 self.player.score += 50
                 powerup_list.remove(coin)
         
