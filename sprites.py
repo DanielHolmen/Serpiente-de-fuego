@@ -187,41 +187,18 @@ class Segment:
         self.image = self.sprite_list[int(self.current_sprite)]
         
     def move(self):
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-        if self.segment_nr > 0:
-            
-=======
-        #Hopper over slangehodet
-        if self.segment_nr > 0:  
-            #Finner retningen segmentet må følge for å bevege seg mot segmentet som befinner seg foran i listen
->>>>>>> 7f2a77dc6ed8b00d91c75128ec251b0d82d03437
-=======
 
         #Hopper over slangehodet
         if self.segment_nr > 0:  
             #Finner retningen segmentet må følge for å bevege seg mot segmentet som befinner seg foran i listen
->>>>>>> Stashed changes
             previous_segment = segment_list[self.segment_nr-1]
             direction = pg.math.Vector2(previous_segment.pos - self.pos)
             direction.normalize_ip()
-
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-            acceleration = direction * 0.1 
-
-=======
-=======
-
->>>>>>> Stashed changes
+            
             #Gir en akselerasjon mot segmentet foran i lista
             acceleration = direction * 0.1
 
             #Oppdaterer farten til segmentet
-<<<<<<< Updated upstream
->>>>>>> 7f2a77dc6ed8b00d91c75128ec251b0d82d03437
-=======
->>>>>>> Stashed changes
             self.vel += acceleration
             self.vel = self.vel.normalize()
             
